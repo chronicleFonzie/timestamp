@@ -25,6 +25,17 @@ app.get("/api/hello", function (req, res) {
 });
 
 
+app.get("/api", function (req, res) {
+    let newDate = {
+        unix: 0, utc: ""
+    }
+    const now = new Date();
+    newDate.unix = now.getTime();
+    newDate.utc = now.toUTCString();
+    return res.status(200).json(newDate);
+})
+
+
 app.get("/api/:date_string", function (req, res) {
 
     const date_string = req.params.date_string;
@@ -41,7 +52,7 @@ app.get("/api/:date_string", function (req, res) {
     // check if date include the following symbols -
     if (date_string.includes("-") || date_string.includes("/") || date_string.includes(" ")) {
         const parsedDate = new Date(date_string);
-        if (isNaN(parsedDate.getTime())){
+        if (isNaN(parsedDate.getTime())) {
             res.json({error: "Invalid date"});
             return;
         }
@@ -50,11 +61,11 @@ app.get("/api/:date_string", function (req, res) {
     } else if (!isNaN(date_string)) {
         newDate.unix = parseInt(date_string);
         newDate.utc = new Date(parseInt(date_string)).toUTCString();
-    } else if (Date.parse(date_string)){
+    } else if (Date.parse(date_string)) {
         const parseDate = new Date(date_string);
         newDate.utc = parseDate.toUTCString();
         newDate.unix = parseDate.getTime();
-    }else {
+    } else {
         res.json({error: "Invalid date"});
         return;
     }
